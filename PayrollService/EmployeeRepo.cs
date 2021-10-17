@@ -6,16 +6,23 @@ using System.Data.SqlClient;
 
 namespace PayrollService
 {
-    class EmployeeRepo
+    public class EmployeeRepo
     {
-        public string connString = ConfigurationManager.ConnectionStrings["conString"].ConnectionString;
-        public SqlConnection connection = new SqlConnection();
+
+        private readonly SqlConnection connection;
+        public EmployeeRepo() {
+            string connString = ConfigurationManager.ConnectionStrings["conString"].ConnectionString;
+            connection = new SqlConnection
+            {
+                ConnectionString = connString
+            };
+        }
 
         public void GetAllEmployee()
         {
             try {
                 EmployeeModel employeeModel = new EmployeeModel();
-                connection.ConnectionString = connString;
+                
                 connection.Open();
                 //Query
                 string sqlQuery = @"SELECT * FROM employee_payroll";
@@ -66,12 +73,10 @@ namespace PayrollService
         {
             try {
                 EmployeeModel employeeModel = new EmployeeModel();
-                connection.ConnectionString = connString;
                 connection.Open();
                 string query = @"SELECT EmployeeName,BasicPay,Deductions,TaxablePay,Tax,NetPay FROM employee_payroll";
                 SqlCommand cmd = new SqlCommand(query, connection);
                 SqlDataReader sqlDataReader = cmd.ExecuteReader();
-                List<string> record=new List<string>();
                 if(sqlDataReader.HasRows)
                 {
                     while (sqlDataReader.Read())
@@ -95,6 +100,37 @@ namespace PayrollService
             finally
             {
                 connection.Close();
+            }
+        }
+
+        public bool UpdateBasicPay(string name, float basicpay)
+        {
+            try
+            {
+
+                using (SqlCommand command = new SqlCommand("spUpdateEmployeeBasicPay", this.connection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@ename", name);
+                    command.Parameters.AddWithValue("@basicpay", basicpay);
+                    connection.Open();
+                    var result = command.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        Console.WriteLine("Employee {0} basic pay change to {1}", name, basicpay);
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+            finally
+            {
+                this.connection.Close();
             }
         }
     }

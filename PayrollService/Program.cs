@@ -27,7 +27,8 @@ namespace PayrollService
             employeeModel.Country = "India";
 
             //employeeRepo.GetAllEmployee();
-            employeeRepo.GetPayDetail();
+            //employeeRepo.GetPayDetail();
+            employeeRepo.UpdateBasicPay("Terisa", 50000);
         }
     }
 }
