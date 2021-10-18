@@ -9,14 +9,7 @@ namespace PayrollService
     public class EmployeeRepo
     {
 
-        private readonly SqlConnection connection;
-        public EmployeeRepo() {
-            string connString = ConfigurationManager.ConnectionStrings["conString"].ConnectionString;
-            connection = new SqlConnection
-            {
-                ConnectionString = connString
-            };
-        }
+        public SqlConnection connection = new SqlConnection(@"Data Source=DESKTOP-NGODVI2\SQLEXPRESS;Initial Catalog=payroll_service;Integrated Security=True");
 
         public void GetAllEmployee()
         {
@@ -105,9 +98,11 @@ namespace PayrollService
 
         public bool UpdateBasicPay(string name, float basicpay)
         {
+            bool resultbol = false;
             try
             {
-
+                //string connString = ConfigurationManager.ConnectionStrings["conString"].ConnectionString;
+                //connection.ConnectionString = connString;
                 using (SqlCommand command = new SqlCommand("spUpdateEmployeeBasicPay", this.connection))
                 {
                     command.CommandType = System.Data.CommandType.StoredProcedure;
@@ -118,7 +113,7 @@ namespace PayrollService
                     if (result != 0)
                     {
                         Console.WriteLine("Employee {0} basic pay change to {1}", name, basicpay);
-                        return true;
+                        return resultbol = true;
                     }
                 }
                 return false;
@@ -126,7 +121,7 @@ namespace PayrollService
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                return false;
+                return resultbol;
             }
             finally
             {
