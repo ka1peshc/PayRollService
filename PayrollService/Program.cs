@@ -28,7 +28,9 @@ namespace PayrollService
 
             //employeeRepo.GetAllEmployee();
             //employeeRepo.GetPayDetail();
-            employeeRepo.UpdateBasicPay("Terisa", 50000);
+            //employeeRepo.UpdateBasicPay("Terisa", 50000);
+            employeeRepo.DisplayEmployeeDetailBasedOnStartingDate(Convert.ToDateTime("2019/01/01"));
+
         }
     }
 }

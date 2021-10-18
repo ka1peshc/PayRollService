@@ -101,8 +101,6 @@ namespace PayrollService
             bool resultbol = false;
             try
             {
-                //string connString = ConfigurationManager.ConnectionStrings["conString"].ConnectionString;
-                //connection.ConnectionString = connString;
                 using (SqlCommand command = new SqlCommand("spUpdateEmployeeBasicPay", this.connection))
                 {
                     command.CommandType = System.Data.CommandType.StoredProcedure;
@@ -127,6 +125,58 @@ namespace PayrollService
             {
                 this.connection.Close();
             }
+        }
+
+        public bool DisplayEmployeeDetailBasedOnStartingDate(DateTime date)
+        {
+            bool boolResult = false;
+            try
+            {
+                using SqlCommand command = new SqlCommand("spFetchEmployeeBasedOnStartingDate", this.connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.Parameters.AddWithValue("@startDate", date);
+                connection.Open();
+                SqlDataReader dr = command.ExecuteReader();
+                EmployeeModel employeeModel = new EmployeeModel();
+                if (dr.HasRows)
+                {
+                    while (dr.Read())
+                    {
+                        employeeModel.EmployeeID = dr.GetInt32(0);
+                        employeeModel.EmployeeName = dr.GetString(1);
+                        employeeModel.PhoneNumber = dr.GetString(2);
+                        employeeModel.Address = dr.GetString(3);
+                        employeeModel.Department = dr.GetString(4);
+                        employeeModel.Gender = dr.GetString(5);
+                        employeeModel.BasicPay = dr.GetDouble(6);
+                        employeeModel.Deductions = dr.GetDouble(7);
+                        employeeModel.TaxablePay = dr.GetDouble(8);
+                        employeeModel.Tax = dr.GetDouble(9);
+                        employeeModel.NetPay = dr.GetDouble(10);
+                        employeeModel.StartDate = dr.GetDateTime(11);
+                        employeeModel.City = dr.GetString(12);
+                        employeeModel.Country = dr.GetString(13);
+                        //Display one record
+                        Console.WriteLine("{0}\t{1}\t{2}\t{3}", employeeModel.EmployeeID, employeeModel.EmployeeName, employeeModel.BasicPay, employeeModel.StartDate);
+                        Console.WriteLine("\n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No record in the table");
+                }
+                connection.Close();
+                return boolResult = true;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return boolResult;
         }
     }
 }
