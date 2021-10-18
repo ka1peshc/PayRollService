@@ -178,5 +178,64 @@ namespace PayrollService
             }
             return boolResult;
         }
+
+        public void DisplayAggregateQuery()
+        {
+            string sumQuery = @"SELECT SUM(BasicPay) FROM employee_payroll WHERE Gender='F' GROUP BY Gender";
+            SqlCommand cmd = new SqlCommand(sumQuery, connection);
+            connection.Open();
+            double FemaleSalary = Convert.ToDouble(cmd.ExecuteScalar());
+            Console.WriteLine("sum of salary for female is {0}", FemaleSalary);
+            connection.Close();
+
+            string sumQueryForMale = @"SELECT SUM(BasicPay) FROM employee_payroll WHERE Gender='M' GROUP BY Gender";
+            SqlCommand cmdforSum = new SqlCommand(sumQueryForMale, connection);
+            connection.Open();
+            double MaleSalaryTotal = Convert.ToDouble(cmdforSum.ExecuteScalar());
+            connection.Close();
+            Console.WriteLine("sum of salary for male is {0}", MaleSalaryTotal);
+
+            string AVGFemaleSalary = @"SELECT AVG(BasicPay) FROM employee_payroll WHERE Gender='F' GROUP BY Gender";
+            SqlCommand avgFsal = new SqlCommand(AVGFemaleSalary, connection);
+            connection.Open();
+            double avgFemaleSalary = Convert.ToDouble(avgFsal.ExecuteScalar());
+            Console.WriteLine("Avreage salary for female is {0}", avgFemaleSalary);
+            connection.Close();
+
+            string AVGQueryForMale = @"SELECT AVG(BasicPay) FROM employee_payroll WHERE Gender='M' GROUP BY Gender";
+            SqlCommand avgMsal = new SqlCommand(AVGQueryForMale, connection);
+            connection.Open();
+            double avgMaleSalary = Convert.ToDouble(avgMsal.ExecuteScalar());
+            connection.Close();
+            Console.WriteLine("Average salary for male is {0}", avgMaleSalary);
+
+            string MINQueryForFemale = @"SELECT MIN(BasicPay) FROM employee_payroll WHERE Gender='F' GROUP BY Gender";
+            SqlCommand minFsal = new SqlCommand(MINQueryForFemale, connection);
+            connection.Open();
+            double minFemaleSalary = Convert.ToDouble(minFsal.ExecuteScalar());
+            connection.Close();
+            Console.WriteLine("Minimum salary for female is {0}", minFemaleSalary);
+
+            string MINQueryForMale = @"SELECT MIN(BasicPay) FROM employee_payroll WHERE Gender='M' GROUP BY Gender";
+            SqlCommand minMsal = new SqlCommand(MINQueryForMale, connection);
+            connection.Open();
+            double minMaleSalary = Convert.ToDouble(minMsal.ExecuteScalar());
+            connection.Close();
+            Console.WriteLine("Minimum salary for female is {0}", minMaleSalary);
+
+            string MAXQueryForFemale = @"SELECT MAX(BasicPay) FROM employee_payroll WHERE Gender='F' GROUP BY Gender";
+            SqlCommand MAXFsal = new SqlCommand(MAXQueryForFemale, connection);
+            connection.Open();
+            double MAXFemaleSalary = Convert.ToDouble(MAXFsal.ExecuteScalar());
+            connection.Close();
+            Console.WriteLine("MAXimum salary for female is {0}", MAXFemaleSalary);
+
+            string MAXQueryForMale = @"SELECT MAX(BasicPay) FROM employee_payroll WHERE Gender='F' GROUP BY Gender";
+            SqlCommand MAXMsal = new SqlCommand(MAXQueryForMale, connection);
+            connection.Open();
+            double MAXMaleSalary = Convert.ToDouble(MAXMsal.ExecuteScalar());
+            connection.Close();
+            Console.WriteLine("MAXimum salary for Male is {0}", MAXMaleSalary);
+        }
     }
 }
