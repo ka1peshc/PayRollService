@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using PayrollService.Model;
 
 namespace PayrollService
 {
@@ -30,7 +31,11 @@ namespace PayrollService
             //employeeRepo.GetPayDetail();
             //employeeRepo.UpdateBasicPay("Terisa", 50000);
             //employeeRepo.DisplayEmployeeDetailBasedOnStartingDate(Convert.ToDateTime("2019/01/01"));
-            employeeRepo.DisplayAggregateQuery();
+            //employeeRepo.DisplayAggregateQuery();
+
+            EmployeeTransaction et = new EmployeeTransaction();
+            PayrollModel ps = new PayrollModel();
+            et.updateSalary(ps);
         }
     }
 }
